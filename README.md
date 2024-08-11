@@ -4,7 +4,9 @@ To check similarity between text documents using cosine similarity, first conver
 word embeddings. Each document is represented as a vector in a high-dimensional space. Cosine similarity measures the cosine of the angle between these vectors. A smaller angle (or higher cosine value) indicates greater 
 similarity between the documents. This approach effectively quantifies how closely related the content of the documents is by comparing the orientation of their vector representations.
 
-![DALL·E 2024-08-11 20 10 55 - A simple visual representation of cosine similarity between two text documents  Show two text documents represented as vectors in a 2D space  One vect](https://github.com/user-attachments/assets/27d501b8-384a-4c62-acba-ddd49dc80b02)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/2ef99b85-5903-4694-9053-80149b97bf0c" alt="cos-similarity">
+</div>
 
 ## Screenshots
 
