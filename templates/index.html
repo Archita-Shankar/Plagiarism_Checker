@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagiarism Checker</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: rgb(26, 34, 78);
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scrollbars */
+        }
+
+        .content-wrapper {
+            transform: scale(0.7);
+            transform-origin: top left;
+            width: 142.86%; /* Adjust width to prevent horizontal scrollbars after scaling */
+        }
+
+        h1 {
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .image-container img {
+            max-width: 500px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: rgb(26, 34, 78);
+            border-color: rgb(26, 34, 78);
+            text-align: center;
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            background-color: rgb(255, 204, 66);
+            border-color: rgb(255, 204, 66);
+            color: #343a40;
+        }
+
+        .btn-group-custom {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px; /* Reduced gap between buttons */
+            margin-top: 0px; /* Reduced margin-top */
+        }
+
+        .btn-group-custom .btn {
+            width: 360px; /* Set both buttons to 360px width */
+            height: 50px; /* Set a consistent height if needed */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            text-align: center;
+            margin: 0; /* Remove margin between buttons */
+        }
+
+        .file-list {
+            margin-top: 10px;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .file-list li {
+            background-color: #e9ecef;
+            padding: 5px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .tooltip-icon {
+            cursor: pointer;
+            margin-left: 5px;
+            color: #007bff;
+        }
+
+        .footer {
+            text-align: center;
+            margin-bottom: 10px; /* Reduced margin-bottom */
+            padding: 20px;
+            background-color: rgb(26, 34, 78);
+            color: white;
+            border-radius: 8px;
+        }
+
+        /* Hide the actual file input */
+        #fileInput {
+            display: none;
+        }
+
+        /* Custom styles for the results table */
+        .table-custom thead th {
+            background-color: rgb(26, 34, 78);
+            color: white; /* Adjust text color for contrast */
+        }
+
+        .table-custom tbody td {
+            background-color: rgb(255, 204, 66);
+        }
+
+        .table-custom tbody tr.table-danger {
+            background-color: rgb(255, 99, 71); /* Example for danger rows */
+        }
+
+        .table-custom tbody tr.table-warning {
+            background-color: rgb(255, 204, 66); /* Example for warning rows */
+        }
+
+        .table-custom tbody tr.table-success {
+            background-color: rgb(144, 238, 144); /* Example for success rows */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <div class="container mt-5">
+            <h1 class="text-center">Plagiarism Checker</h1>
+            <div class="image-container">
+                <img src="https://img.freepik.com/free-vector/plagiarism-concept_52683-47989.jpg?t=st=1723367473~exp=1723371073~hmac=65d294c20e28179d7f2f49e0bb4715058eadc4713e6b0060e92b080c8e9392bf&w=1480"
+                    alt="Plagiarism Concept">
+            </div>
+            <form action="/" method="post" enctype="multipart/form-data">
+                <div class="btn-group-custom">
+                    <div class="form-group mb-0">
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('fileInput').click();">
+                            Choose Files
+                        </button>
+                        <input type="file" name="files[]" multiple class="form-control-file" id="fileInput" required>
+                        <ul class="file-list" id="fileList"></ul>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Check Plagiarism</button>
+                </div>
+            </form>
+
+            {% if results %}
+            <div class="mt-5">
+                <h3>Plagiarism Results:</h3>
+                <table class="table table-striped table-bordered table-custom">
+                    <thead>
+                        <tr>
+                            <th>Document 1</th>
+                            <th>Document 2</th>
+                            <th>Similarity Score <span class="tooltip-icon" data-toggle="tooltip"
+                                    title="A score closer to 1 indicates higher similarity between documents.">?</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr class="{% if result[2] > 0.7 %}table-danger{% elif result[2] > 0.4 %}table-warning{% else %}table-success{% endif %}">
+                            <td>{{ result[0] }}</td>
+                            <td>{{ result[1] }}</td>
+                            <td>{{ result[2]|round(2) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <div class="footer">
+                <p>&copy; 2024 Plagiarism Checker. All rights reserved. Created by Archita Shankar</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            var fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            for (var i = 0; i < this.files.length; i++) {
+                var li = document.createElement('li');
+                li.textContent = this.files[i].name;
+                fileList.appendChild(li);
+            }
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+</body>
+
+</html>
