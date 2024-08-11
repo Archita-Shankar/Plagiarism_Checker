@@ -1,4 +1,4 @@
-# Hangman Game
+# Plagiarism Checker
 
 To check similarity between text documents using cosine similarity, first convert the raw text data into numerical vectors. This is typically done using methods like Term Frequency-Inverse Document Frequency (TF-IDF) or 
 word embeddings. Each document is represented as a vector in a high-dimensional space. Cosine similarity measures the cosine of the angle between these vectors. A smaller angle (or higher cosine value) indicates greater 
